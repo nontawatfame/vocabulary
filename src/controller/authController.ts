@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response, } from "express";
 import * as user from "../model/user";
-import { RequestLogin, RequestRegister } from "../types/authType";
+import { RequestLogin, RequestRegister, ResponseLogin } from "../types/authType";
 import * as bcrypt from "bcrypt"
+import * as jwt from "jsonwebtoken"
 
 export async function login(req: Request<any,any,RequestLogin>, res: Response, next: NextFunction) {
     try {
@@ -11,12 +12,12 @@ export async function login(req: Request<any,any,RequestLogin>, res: Response, n
             return res.status(500).json({ message: "Username and password are incorrect."})
         }
 
+        let reslogin: ResponseLogin = {
+            accessToken : await jwt.sign({username: resulteUser[0].username}, process.env.SECRET_TOKEN as string, {expiresIn: "30m"}),
+            refreshToken : await jwt.sign({username: resulteUser[0].username}, process.env.SECRET_TOKEN as string, {expiresIn: "60m"})
+        }
 
-
-        res.json({
-            status: 200,
-            message: "success login",
-        })
+        res.status(200).json(reslogin)
     } catch (error) {
         next(error)
     }

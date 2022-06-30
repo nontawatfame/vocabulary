@@ -10,3 +10,8 @@ export interface RequestRegister {
     confirmPassword: string,
     
 }
+
+export interface ResponseLogin {
+    accessToken: string,
+    refreshToken: string
+}
