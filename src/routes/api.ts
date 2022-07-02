@@ -1,9 +1,12 @@
 import express from "express"
 import authentication from "./authentication";
-import * as typeController from "../controller/typeController"
+import vocabularyRouter from "./vocabularyRoute";
+import typeRoute from "./typeRoute";
+
 
 const api = express.Router();
 api.use(authentication)
-api.get("/getTypes", typeController.getTypes);
-
+api.use("/type",typeRoute)
+api.use("/vocabulary", vocabularyRouter)
 export default api
+

@@ -5,11 +5,7 @@ import { RequestRegister } from "../types/authType";
 export async function create(req: RequestRegister) {
     const sql: string = `INSERT INTO user (username, password, name) VALUES ('${req.username}', '${req.password}', '${req.name}');`
     const result: OkPacket = await query(sql,null) as OkPacket;
-    let message = 'Error in creating user';
-    if (result.affectedRows) {
-        message = 'created user successfully';
-    }
-    return {message};
+    return result.affectedRows;
 }
 
 export async function findByUsername(username: string) {

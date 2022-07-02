@@ -1,0 +1,9 @@
+INSERT INTO `type` (`name`, `create_at`, `updated_at`) VALUES ('Verb', '2022-06-30 21:56:59', '2022-06-30 22:15:49');
+INSERT INTO `type` (`name`, `create_at`, `updated_at`) VALUES ('Noun', '2022-06-30 21:57:08', '2022-06-30 21:57:08');
+INSERT INTO `type` (`name`, `create_at`, `updated_at`) VALUES ('Adjective', '2022-06-30 21:57:29', '2022-06-30 21:57:29');
+INSERT INTO `type` (`name`, `create_at`, `updated_at`) VALUES ('Adverb', '2022-06-30 21:57:39', '2022-06-30 21:57:39');
+INSERT INTO `type` (`name`, `create_at`, `updated_at`) VALUES ('Determiner', '2022-06-30 21:57:59', '2022-06-30 21:57:59');
+INSERT INTO `type` (`name`, `create_at`, `updated_at`) VALUES ('Preposition', '2022-06-30 21:58:12', '2022-06-30 21:58:12');
+INSERT INTO `type` (`name`, `create_at`, `updated_at`) VALUES ('Pronoun', '2022-06-30 21:58:19', '2022-06-30 21:58:19');
+INSERT INTO `type` (`name`, `create_at`, `updated_at`) VALUES ('Conjunction', '2022-06-30 21:58:36', '2022-06-30 21:58:36');
+INSERT INTO `type` (`name`, `create_at`, `updated_at`) VALUES ('Interjection', '2022-06-30 21:58:45', '2022-06-30 21:58:45');

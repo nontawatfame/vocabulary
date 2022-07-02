@@ -11,9 +11,13 @@ const db: PoolOptions = {
     connectionLimit: 100
 }
 
+
+
+
 export async function query(sql: string, params: any) {
     mysql.initPool(db)
     const connection = await mysql.getPool();
+    (await connection.getConnection()).config.namedPlaceholders = true
     const [results] = await connection.execute(sql, params);
     await connection.end()
     return results;

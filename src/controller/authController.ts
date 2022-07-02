@@ -42,8 +42,11 @@ export async function register(req: Request<any, any, RequestRegister>, res: Res
 
         let salt = await bcrypt.genSalt(10)
         body.password = await bcrypt.hash(body.password, salt);
-        await user.create(req.body)
-        res.status(200).json({message: "register user successfully"})
+        let message = 'Error in creating user';
+        if (await user.create(req.body)) {
+            message = 'register user successfully';
+        }
+        res.status(200).json({message})
     } catch (error) {
         next(error)
     }

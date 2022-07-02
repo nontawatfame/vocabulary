@@ -13,7 +13,6 @@ export const middleware = async (req: Request, res: Response, next: NextFunction
                 return next()
             }
         }
-    
         if (req.headers.authorization != undefined || req.headers.authorization != null) {
             let authorization = req.headers.authorization.split(" ")
             if (authorization[0] == "Bearer") {
@@ -24,7 +23,6 @@ export const middleware = async (req: Request, res: Response, next: NextFunction
                 }
             }
         }
-        
         return res.json({
             status: 401,
             message: "unauthorization"
@@ -33,7 +31,6 @@ export const middleware = async (req: Request, res: Response, next: NextFunction
         if (error instanceof jwt.NotBeforeError) {
             console.log("NotBeforeError")
         }
-
         if (error instanceof jwt.TokenExpiredError) {
             console.log("TokenExpiredError")
             return res.json({
@@ -41,7 +38,6 @@ export const middleware = async (req: Request, res: Response, next: NextFunction
                 message: error.message
             })
         }
-
         return res.json({
             status: 401,
             message: "unauthorization"
