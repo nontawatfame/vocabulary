@@ -5,11 +5,13 @@ import path from "path";
 import morgan from "morgan";
 import api from "./src/routes/api";
 import { middleware } from "./src/config/middleware";
+import cors from "cors"
 
 dotenv.config({path:`${__dirname}/src/env/.env.${process.env.NODE_ENV}`});
 const app: Express = express();
 
 app.use(morgan('dev'));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

@@ -41,10 +41,6 @@ export async function deleteById(req: Request<{id: number}>, res: Response, next
 
 export async function updateById(req: Request<{id: number}, any, Vocabulary>, res: Response, next: NextFunction) {
     try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-          return res.status(400).json({ errors: errors.array() });
-        }
         let message = "Error in Update vocabulary"
         if (await vocabulary.updateById(req.params.id, req.body)) {
             message = "update vocabulary successfully"
