@@ -52,3 +52,11 @@ export async function register(req: Request<any, any, RequestRegister>, res: Res
     }
 }
 
+export function verifyToken(req: Request<any, any, any>, res: Response, next: NextFunction) {
+    try {
+        res.status(200).json({verifyToken: true})
+    } catch (error) {
+        next(error)
+    }
+}
+

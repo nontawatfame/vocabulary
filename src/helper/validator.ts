@@ -17,3 +17,10 @@ export function validatorMiddle(arrayVal: ValidationChain[]): any {
   return validatorRouter;
 }
 
+export const validatorMsg = {
+  exists: "field is required",
+  isLength: (len: number) => {
+    return `must be at least ${len} characters`
+  }
+}
+
