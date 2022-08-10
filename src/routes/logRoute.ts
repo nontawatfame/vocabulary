@@ -9,9 +9,11 @@ const validatorLog = [
     body("correct").exists().bail().notEmpty(), 
 ]
 
+const validatorLogDetail = [
+    body("logDetailList").exists({checkNull: true}), 
+]
+
 const logRouter = express.Router();
-logRouter.get("/findAll", logController.findAll);
-logRouter.post("/create", validatorLog, validatorError, logController.create);
-logRouter.delete("/deleteById/:id", logController.deleteById);
-logRouter.put("/updateById/:id", validatorLog, validatorError, logController.updateById);
+logRouter.post("/createLogDetail", validatorLogDetail, validatorError, logController.createLogDetail);
+logRouter.get("/getLogHistory", logController.getLogHistory);
 export default logRouter

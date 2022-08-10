@@ -60,3 +60,13 @@ export function verifyToken(req: Request<any, any, any>, res: Response, next: Ne
     }
 }
 
+export function getUser(req: Request<any, any, any>, res: Response, next: NextFunction) {
+    try {
+        console.log(req.headers)
+        console.log(req.headers.authorization)
+        // const payload: any = await jwt.verify(token, process.env.SECRET_TOKEN as string)
+    } catch (error) {
+        next(error)
+    }
+}
+

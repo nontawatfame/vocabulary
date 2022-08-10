@@ -11,7 +11,8 @@ const validatorVocabulary: ValidationChain[] = [
 
 const vocabularyRouter = express.Router()
 vocabularyRouter.get("/findAll", vocabularyController.findAll);
-vocabularyRouter.post("/create", validatorVocabulary, validatorError, vocabularyController.create);
+vocabularyRouter.get("/random", vocabularyController.random);
+vocabularyRouter.post("/create", vocabularyController.create);
 vocabularyRouter.delete("/deleteById/:id", vocabularyController.deleteById);
 vocabularyRouter.put("/updateById/:id", validatorVocabulary, validatorError, vocabularyController.updateById);
 export default vocabularyRouter

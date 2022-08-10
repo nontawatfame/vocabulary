@@ -12,4 +12,5 @@ const authentication = express.Router();
 authentication.post("/login", validatorLog, validatorError ,authController.login)
 authentication.post("/register", authController.register)
 authentication.post("/verifyToken", authController.verifyToken)
+authentication.post("/getUser", authController.getUser)
 export default authentication

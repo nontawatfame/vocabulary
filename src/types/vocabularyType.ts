@@ -1,5 +1,6 @@
 export interface Vocabulary {
     name: string,
     type_id: number,
-    meaning: string
+    meaning: string,
+    sound: string
 }
