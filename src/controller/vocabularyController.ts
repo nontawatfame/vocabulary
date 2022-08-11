@@ -16,21 +16,24 @@ export async function findAll(req: Request, res: Response, next: NextFunction) {
 
 export async function create(req: any, res: Response, next: NextFunction) {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         console.log(req.files)
         req.body.sound = ""
         if (req.files != null) {
             let sound : UploadedFile = req.files.sound; 
-            console.log(sound)
-            let type = sound.name.split(".")[1]
+            // console.log(sound)
+            
+            let type = path.extname(sound.name)
             let nameFile = `${req.body.name}.${type}`;
             sound.mv(path.join(__dirname, "..", "..", `public`,"sound", nameFile), (error) => {
                 console.log(error)
             })
+            console.log(sound)
+            console.log(nameFile)
             req.body.sound = nameFile
         }
 
-        
+        console.log(req.body)
 
         let message = 'Error in creating vocabulary';
         if (await vocabulary.create(req.body)) {
@@ -59,14 +62,18 @@ export async function deleteById(req: Request<{id: number}>, res: Response, next
 
 export async function updateById(req: any, res: Response, next: NextFunction) {
     try {
+        
+        req.body.sound = ""
         if (req.files != null) {
             let sound : UploadedFile = req.files.sound; 
-            console.log(sound)
-            let type = sound.name.split(".")[1]
-            sound.name = "test1"
-            sound.mv(path.join(__dirname, "..", "..", `public`,"sound", `${req.body.name}.${type}`), (error) => {
+            let type = path.extname(sound.name)
+            let nameFile = `${req.body.name}.${type}`;
+            sound.mv(path.join(__dirname, "..", "..", `public`,"sound", nameFile), (error) => {
                 console.log(error)
             })
+            console.log(sound)
+            console.log(nameFile)
+            req.body.sound = nameFile
         }
 
         let message = "Error in Update vocabulary"
@@ -82,6 +89,16 @@ export async function updateById(req: any, res: Response, next: NextFunction) {
 export async function random(req: Request<any>, res: Response, next: NextFunction) {
     try {
         return res.status(200).json(await vocabulary.random())
+    } catch (error) {
+        return next(error)
+    }
+}
+
+export async function findAllPagination(req: Request<{index: number, size: number}>, res: Response, next: NextFunction) {
+    try {
+        let params = req.params
+        let index = (params.index - 1) * params.size
+        return res.status(200).json(await vocabulary.findAllPagination(index, params.size))
     } catch (error) {
         return next(error)
     }

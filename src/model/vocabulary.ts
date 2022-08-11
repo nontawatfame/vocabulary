@@ -4,6 +4,7 @@ import {query} from "../config/conectMysql"
 
 export async function create(vocabulary: Vocabulary) {
     const sql: string = `INSERT INTO vocabulary (name, type_id, meaning, sound) VALUES ('${vocabulary.name}', ${vocabulary.type_id}, '${vocabulary.meaning}', '${vocabulary.sound}' );`
+    console.log(sql)
     const result: OkPacket = await query(sql,null) as OkPacket;
     return result.affectedRows;
 }
@@ -11,6 +12,19 @@ export async function create(vocabulary: Vocabulary) {
 export async function findAll() {
     const sql: string = `SELECT * FROM vocabulary`
     const result: RowDataPacket[] = await query(sql,null) as RowDataPacket[];
+    return result;
+}
+
+export async function findAllPagination(index: number, size: number) {
+    const sql: string = `SELECT v.*, t.abbreviation FROM vocabulary v LEFT JOIN type t on v.type_id = t.id LIMIT ?,?`
+    const sqlCount: string = `SELECT COUNT(*) as count FROM vocabulary v LEFT JOIN type t on v.type_id = t.id`
+    const rowList: RowDataPacket[] = await query(sql,[index, size]) as RowDataPacket[];
+    const rowCount: RowDataPacket[] = await query(sqlCount,[index, size]) as RowDataPacket[];
+    const result = {
+        data: rowList,
+        total_data: (rowCount.length > 0) ? rowCount[0].count : 0,
+        total_pages: (rowCount.length > 0) ? Math.ceil(rowCount[0].count / size) : 0
+    }
     return result;
 }
 
