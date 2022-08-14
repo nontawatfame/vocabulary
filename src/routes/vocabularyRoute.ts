@@ -5,7 +5,7 @@ import { body, ValidationChain } from "express-validator";
 
 const validatorVocabulary: ValidationChain[] = [
     body("name").exists().bail().notEmpty(), 
-    body("type_id").exists().bail().notEmpty(),
+    body("type_id").exists({checkFalsy: true}).bail().notEmpty(),
     body("meaning").exists().bail().notEmpty(),
 ]
 
