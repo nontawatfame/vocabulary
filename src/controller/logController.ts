@@ -27,6 +27,7 @@ export async function createLogDetail(req: Request<any,any,{logDetailList: logDe
         }
 
         let result = await log.create(logH)
+        console.log(result)
         let logId = result.insertId
         
         logDetailList.forEach(async (value) => {
@@ -36,7 +37,6 @@ export async function createLogDetail(req: Request<any,any,{logDetailList: logDe
                 correct: value.correct,
                 incorrect: value.incorrect
             }
-            console.log(logDetailReq)
             await logDetail.create(logDetailReq)
         })
 

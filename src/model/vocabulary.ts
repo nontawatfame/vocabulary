@@ -15,8 +15,22 @@ export async function findAll() {
 }
 
 export async function findAllPagination(index: number, size: number, search: string) {
-    const sql: string = `SELECT v.*, t.abbreviation FROM vocabulary v LEFT JOIN type t on v.type_id = t.id WHERE v.name LIKE '%${search}%' ORDER BY v.id DESC LIMIT ?,?`
-    const sqlCount: string = `SELECT COUNT(*) as count FROM vocabulary v LEFT JOIN type t on v.type_id = t.id WHERE v.name LIKE '%${search}%'`
+    const having: string = "HAVING SUM(ld.correct) < 10"
+    const sql: string = `SELECT v.*, t.abbreviation, SUM(ld.correct) as correct, SUM(ld.incorrect) as incorrect FROM vocabulary v 
+                        LEFT JOIN type t on v.type_id = t.id
+                        LEFT JOIN log_detail ld on v.id = ld.vocabulary_id 
+                        WHERE v.name LIKE '%${search}%'
+                        GROUP BY v.id
+                        ${having}
+                        ORDER BY v.id DESC 
+                        LIMIT ?,?`
+    const sqlCount: string = `SELECT COUNT(*) as count FROM (SELECT v.* FROM vocabulary v 
+                        LEFT JOIN type t on v.type_id = t.id
+                        LEFT JOIN log_detail ld on v.id = ld.vocabulary_id 
+                        WHERE v.name LIKE '%${search}%'
+                        GROUP BY v.id
+                        ${having}) as total`
+                        
     const rowList: RowDataPacket[] = await query(sql,[index, size]) as RowDataPacket[];
     const rowCount: RowDataPacket[] = await query(sqlCount,[index, size]) as RowDataPacket[];
     const result = {
@@ -46,7 +60,14 @@ export async function updateById(id: number, vocabulary: Vocabulary) {
 }
 
 export async function random() {
-    const sql: string = `SELECT v.*, y.abbreviation FROM vocabulary v LEFT JOIN type y on v.type_id = y.id ORDER BY RAND() LIMIT 0,12;`
+    const having: string = "HAVING SUM(ld.correct) < 10"
+    const sql: string = `SELECT v.*, y.abbreviation,  SUM(ld.correct) as correct, SUM(ld.incorrect) as incorrect FROM vocabulary v 
+                        LEFT JOIN type y on v.type_id = y.id 
+                        LEFT JOIN log_detail ld on v.id = ld.vocabulary_id
+                        GROUP BY v.id
+                        ${having}
+                        ORDER BY RAND() LIMIT 0,12;`
+    console.log(sql)
     const result: RowDataPacket[] = await query(sql,null) as RowDataPacket[];
     return result;
 }
