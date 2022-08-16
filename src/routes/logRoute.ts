@@ -16,4 +16,5 @@ const validatorLogDetail = [
 const logRouter = express.Router();
 logRouter.post("/createLogDetail", validatorLogDetail, validatorError, logController.createLogDetail);
 logRouter.get("/getLogHistory", logController.getLogHistory);
+logRouter.get("/getLogDetailById/:id", logController.getLogDetailById);
 export default logRouter

@@ -33,7 +33,7 @@ export async function updateById(id: number, log: LogType) {
 }
 
 export async function getLogHistory(time: string) { 
-    const sql: string = `SELECT * FROM log l WHERE l.create_at LIKE "${time}%"`
+    const sql: string = `SELECT * FROM log l WHERE l.create_at LIKE "${time}%" ORDER BY l.id DESC`
     const result: RowDataPacket[] = await query(sql,null) as RowDataPacket[];
     return result;
 }

@@ -55,3 +55,12 @@ export async function getLogHistory(req: Request<any>, res: Response, next: Next
         return next(error)
     }
 }
+
+export async function getLogDetailById(req: Request<any>, res: Response, next: NextFunction) { 
+    try {
+        let result = await logDetail.findByLogId(req.params.id)
+        res.status(200).json(result)
+    } catch (error) {
+        return next(error)
+    }
+}

@@ -14,6 +14,15 @@ export async function findAll() {
     return result;
 }
 
+export async function findByLogId(id: number) {
+    const sql: string = `SELECT ld.*, v.name, v.meaning, t.abbreviation FROM log_detail ld
+                        LEFT JOIN vocabulary v on v.id = ld.vocabulary_id
+                        LEFT JOIN type t on t.id = v.type_id
+                        WHERE log_id = ${id}`
+    const result: RowDataPacket[] = await query(sql,null) as RowDataPacket[];
+    return result;
+}
+
 export async function deleteById(id: number) {
     const sql: string = `DELETE FROM log_detail WHERE id = ${id};`
     const result: OkPacket = await query(sql,null) as OkPacket;
