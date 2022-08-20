@@ -4,7 +4,7 @@ import { validationResult } from "express-validator";
 import path from "path";
 import * as vocabulary from "../model/vocabulary";
 import { Vocabulary, VocabularyTable } from "../types/vocabularyType";
-
+import fs from 'fs'
 
 export async function findAll(req: Request, res: Response, next: NextFunction) {
     try {
@@ -68,6 +68,7 @@ export async function deleteById(req: Request<{id: number}>, res: Response, next
 export async function updateById(req: any, res: Response, next: NextFunction) {
     try {
         let result = await vocabulary.findById(req.params.id) as VocabularyTable[]
+        console.log(result)
         let resultCheckName = await vocabulary.checkName(req.body.name)
         let checkName: any = false
         if (resultCheckName.length > 0) {
@@ -113,6 +114,32 @@ export async function random(req: Request<any>, res: Response, next: NextFunctio
 
 export async function findAllPagination(req: Request<{index: number, size: number},any,any,{search: string}>, res: Response, next: NextFunction) {
     try {
+        // console.log(__dirname)
+        // let dir = `${__dirname}/../../public/sound`
+        // fs.readdirSync(dir).forEach(file => {
+        //     console.log(file.split("."));
+        //     let fileSplit = file.split(".")
+        //     let fileName = fileSplit[0] + "." + "mp3"
+        //     console.log(file)
+        //     console.log(fileName)
+        //     // fs.renameSync(`${dir}/${file}`, `${dir}/${fileName}`)
+        // });
+
+        let result = await vocabulary.findAll()
+        console.log(result)
+        result.forEach( async (value) => {
+            let voca = value as Vocabulary;
+            let name = (value.name as string).trim()
+            console.log((value.sound as string).split("."))
+            let fileSplit = (value.sound as string).split(".")
+            let fileName = name + "." + "mp3"
+            console.log(fileName)
+            voca.name = name
+            voca.sound = fileName
+            // await vocabulary.updateById(value.id, voca);
+        })
+
+
         let params = req.params
         let index = (params.index - 1) * params.size
         let search = req.query.search

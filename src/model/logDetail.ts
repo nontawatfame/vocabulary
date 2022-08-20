@@ -15,7 +15,7 @@ export async function findAll() {
 }
 
 export async function findByLogId(id: number) {
-    const sql: string = `SELECT ld.*, v.name, v.meaning, t.abbreviation FROM log_detail ld
+    const sql: string = `SELECT ld.*, v.name, v.sound, v.meaning, t.abbreviation FROM log_detail ld
                         LEFT JOIN vocabulary v on v.id = ld.vocabulary_id
                         LEFT JOIN type t on t.id = v.type_id
                         WHERE log_id = ${id}`

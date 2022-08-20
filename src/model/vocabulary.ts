@@ -14,22 +14,23 @@ export async function findAll() {
     return result;
 }
 
+const tableFrom: string = `(SELECT v.*, t.abbreviation, IFNULL(SUM(ld.correct),0) as correct, IFNULL(SUM(ld.incorrect),0) as incorrect  FROM vocabulary v 
+                                LEFT JOIN log_detail ld on v.id = ld.vocabulary_id LEFT JOIN type t on v.type_id = t.id
+                                WHERE ld.id is NULL GROUP BY v.id 
+                                UNION
+                                SELECT v.*, t.abbreviation, IFNULL(SUM(ld.correct),0) as correct, IFNULL(SUM(ld.incorrect),0) as incorrect FROM vocabulary v 
+                                LEFT JOIN log_detail ld on v.id = ld.vocabulary_id LEFT JOIN type t on v.type_id = t.id GROUP BY v.id)`
+const condition: string = "correct <= 10"
+
 export async function findAllPagination(index: number, size: number, search: string) {
-    const having: string = "HAVING SUM(ld.correct) < 10"
-    const sql: string = `SELECT v.*, t.abbreviation, SUM(ld.correct) as correct, SUM(ld.incorrect) as incorrect FROM vocabulary v 
-                        LEFT JOIN type t on v.type_id = t.id
-                        LEFT JOIN log_detail ld on v.id = ld.vocabulary_id 
-                        WHERE v.name LIKE '%${search}%'
-                        GROUP BY v.id
-                        ${having}
-                        ORDER BY v.id DESC 
+    
+    const sql: string = `SELECT * FROM ${tableFrom} T 
+                        WHERE name LIKE '%${search}%' AND ${condition}
+                        ORDER BY id DESC 
                         LIMIT ?,?`
-    const sqlCount: string = `SELECT COUNT(*) as count FROM (SELECT v.* FROM vocabulary v 
-                        LEFT JOIN type t on v.type_id = t.id
-                        LEFT JOIN log_detail ld on v.id = ld.vocabulary_id 
-                        WHERE v.name LIKE '%${search}%'
-                        GROUP BY v.id
-                        ${having}) as total`
+    const sqlCount: string = `SELECT Count(*) as count FROM ${tableFrom} T 
+                        WHERE name LIKE '%${search}%' AND ${condition}
+                        ORDER BY id DESC`
                         
     const rowList: RowDataPacket[] = await query(sql,[index, size]) as RowDataPacket[];
     const rowCount: RowDataPacket[] = await query(sqlCount,[index, size]) as RowDataPacket[];
@@ -55,20 +56,16 @@ export async function deleteById(id: number) {
 
 export async function updateById(id: number, vocabulary: Vocabulary) {
     const sql: string = `UPDATE vocabulary SET name = '${vocabulary.name}', type_id =  '${vocabulary.type_id}', meaning = '${vocabulary.meaning}', sound = '${vocabulary.sound}' WHERE id = ${id};`
-    const result: OkPacket = await query(sql,null) as OkPacket;
+    const result: OkPacket = await query(sql,[]) as OkPacket;
     return result.affectedRows;
 }
 
 export async function random() {
-    const having: string = "HAVING SUM(ld.correct) < 10"
-    const sql: string = `SELECT v.*, y.abbreviation,  SUM(ld.correct) as correct, SUM(ld.incorrect) as incorrect FROM vocabulary v 
-                        LEFT JOIN type y on v.type_id = y.id 
-                        LEFT JOIN log_detail ld on v.id = ld.vocabulary_id
-                        GROUP BY v.id
-                        ${having}
-                        ORDER BY RAND() LIMIT 0,12;`
-    console.log(sql)
+    const sql: string = `SELECT * FROM ${tableFrom} T 
+                WHERE ${condition}
+                ORDER BY RAND() LIMIT 0,12;`
     const result: RowDataPacket[] = await query(sql,null) as RowDataPacket[];
+    console.log(sql)
     return result;
 }
 
