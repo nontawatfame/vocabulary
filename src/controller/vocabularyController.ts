@@ -17,6 +17,7 @@ export async function findAll(req: Request, res: Response, next: NextFunction) {
 export async function create(req: any, res: Response, next: NextFunction) {
     try {
         let checkName1: any = false  
+        req.body.name = (req.body.name as string).trim()
         let result = await vocabulary.checkName(req.body.name)
         if (result.length > 0) {
             result.forEach(value => {
@@ -33,7 +34,7 @@ export async function create(req: any, res: Response, next: NextFunction) {
         if (req.files != null) {
             let sound : UploadedFile = req.files.sound; 
             let type = path.extname(sound.name)
-            let nameFile = `${req.body.name}.${type}`;
+            let nameFile = `${req.body.name}${type}`;
             sound.mv(path.join(__dirname, "..", "..", `public`,"sound", nameFile), (error) => {
                 console.log(error)
             })
@@ -114,32 +115,6 @@ export async function random(req: Request<any>, res: Response, next: NextFunctio
 
 export async function findAllPagination(req: Request<{index: number, size: number},any,any,{search: string}>, res: Response, next: NextFunction) {
     try {
-        // console.log(__dirname)
-        // let dir = `${__dirname}/../../public/sound`
-        // fs.readdirSync(dir).forEach(file => {
-        //     console.log(file.split("."));
-        //     let fileSplit = file.split(".")
-        //     let fileName = fileSplit[0] + "." + "mp3"
-        //     console.log(file)
-        //     console.log(fileName)
-        //     // fs.renameSync(`${dir}/${file}`, `${dir}/${fileName}`)
-        // });
-
-        let result = await vocabulary.findAll()
-        console.log(result)
-        result.forEach( async (value) => {
-            let voca = value as Vocabulary;
-            let name = (value.name as string).trim()
-            console.log((value.sound as string).split("."))
-            let fileSplit = (value.sound as string).split(".")
-            let fileName = name + "." + "mp3"
-            console.log(fileName)
-            voca.name = name
-            voca.sound = fileName
-            // await vocabulary.updateById(value.id, voca);
-        })
-
-
         let params = req.params
         let index = (params.index - 1) * params.size
         let search = req.query.search

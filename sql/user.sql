@@ -1,0 +1,1 @@
+INSERT INTO `user` (`id`, `name`, `username`, `password`, `create_at`, `updated_at`) VALUES (37, 'nontawat', 'nontawat', '$2b$10$jFhEvPuHDNrPQN74hO74j.J9DalPYx3vmsct7XbohTl21lvIXArXa', '2022-06-28 23:51:33', '2022-06-28 23:51:33');
