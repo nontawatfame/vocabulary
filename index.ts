@@ -8,8 +8,20 @@ import * as formData  from "express-form-data"
 import { middleware } from "./src/config/middleware";
 import cors from "cors"
 import  fileUpload from "express-fileupload"
+import * as conectMysql from "./src/config/conectMysql"
 
-dotenv.config({path:`${__dirname}/src/env/.env.${process.env.NODE_ENV}`});
+let pathEnv = path.join(__dirname, 'src', 'env', `.env.${process.env.NODE_ENV}`)
+let pathPublic = path.join(__dirname, 'public')
+if (process.env.NODE_ENV == "product") {
+    pathEnv = path.join(__dirname, '..', 'src', 'env', `.env.${process.env.NODE_ENV}`)
+    pathPublic = path.join(__dirname, '..', 'public')
+}
+
+console.log(pathEnv)
+console.log(pathPublic)
+console.log(process.env.NODE_ENV)
+
+dotenv.config({path: pathEnv});
 const app: Express = express();
 
 app.use(morgan('dev'));
@@ -18,8 +30,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(pathPublic));
 
+console.log("process.env index")
+console.log(process.env.HOST_MYSQL)
+conectMysql.createPool()
 // const options = {
 //     autoClean: true
 // };

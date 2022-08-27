@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "SET NODE_ENV=dev&nodemon ./index.ts ",
+    "start_pro": "nodemon ./dist/index.js ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
