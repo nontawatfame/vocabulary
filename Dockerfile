@@ -30,5 +30,7 @@ EXPOSE 8080
 # The node user is provided in the Node.js Alpine base image
 USER node
 
+ENV RUN_START="production"
+
 # Run npm start script with PM2 when container starts
 CMD [ "pm2-runtime", "pnpm","--", "run", "start_pro" ]

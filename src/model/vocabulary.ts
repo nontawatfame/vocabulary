@@ -65,14 +65,11 @@ export async function random() {
                 WHERE ${condition}
                 ORDER BY RAND() LIMIT 0,12;`
     const result: RowDataPacket[] = await query(sql,null) as RowDataPacket[];
-    console.log(sql)
     return result;
 }
 
 export async function checkName(name: string) {
     const sql: string = `SELECT * FROM vocabulary v WHERE v.name = ?;`
-    console.log(name)
-    console.log(sql)
     const result: RowDataPacket[] = await query(sql,[name]) as RowDataPacket[];
     return result;
 }
