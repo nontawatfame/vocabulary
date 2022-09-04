@@ -3,8 +3,14 @@ import { OkPacket, RowDataPacket } from "mysql2";
 import {query} from "../config/conectMysql"
 
 export async function create(vocabulary: Vocabulary) {
-    const sql: string = `INSERT INTO vocabulary (name, type_id, meaning, sound) VALUES ('${vocabulary.name}', ${vocabulary.type_id}, '${vocabulary.meaning}', '${vocabulary.sound}' );`
-    const result: OkPacket = await query(sql,null) as OkPacket;
+    const sql: string = `INSERT INTO vocabulary (name, type_id, meaning, sound) VALUES (:name, :type_id, :meaning, :sound );`
+    const parameter = {
+        name: vocabulary.name,
+        type_id: vocabulary.type_id,
+        meaning: vocabulary.meaning,
+        sound: vocabulary.sound
+    }
+    const result: OkPacket = await query(sql,parameter) as OkPacket;
     return result.affectedRows;
 }
 
@@ -55,8 +61,14 @@ export async function deleteById(id: number) {
 }
 
 export async function updateById(id: number, vocabulary: Vocabulary) {
-    const sql: string = `UPDATE vocabulary SET name = '${vocabulary.name}', type_id =  '${vocabulary.type_id}', meaning = '${vocabulary.meaning}', sound = '${vocabulary.sound}' WHERE id = ${id};`
-    const result: OkPacket = await query(sql,[]) as OkPacket;
+    const sql: string = `UPDATE vocabulary SET name = :name, type_id =  :type_id, meaning = :meaning, sound = :sound WHERE id = ${id};`
+    const parameter = {
+        name: vocabulary.name,
+        type_id: vocabulary.type_id,
+        meaning: vocabulary.meaning,
+        sound: vocabulary.sound
+    }
+    const result: OkPacket = await query(sql,parameter) as OkPacket;
     return result.affectedRows;
 }
 

@@ -36,15 +36,11 @@ export async function create(req: any, res: Response, next: NextFunction) {
         }
 
         req.body.sound = ""
-        console.log('path.join(__dirname, "..", "..", `public`,"sound")')
-        console.log(pathSound)
-        console.log(path.join(__dirname, "..", "..", ".." , `public`,"sound"))
         if (req.files != null) {
             let sound : UploadedFile = req.files.sound; 
             let type = path.extname(sound.name)
             let nameFile = `${req.body.name}${type}`;
-            console.log(nameFile)
-            sound.mv(path.join(__dirname, "..", ((process.env.RUN_START as string) == "production") ? "../.." : "..", `public`,"sound", nameFile), (error) => {
+            sound.mv(`${pathSound}/${nameFile}`, (error) => {
                 console.log(error)
             })
             req.body.sound = nameFile
@@ -98,11 +94,7 @@ export async function updateById(req: any, res: Response, next: NextFunction) {
             let sound : UploadedFile = req.files.sound; 
             let type = path.extname(sound.name)
             let nameFile = `${req.body.name}${type}`;
-            console.log("nameFile")
-            console.log("nameFile")
-            console.log(nameFile)
-            console.log(type)
-            sound.mv(path.join(__dirname, "..", "..", `public`,"sound", nameFile), (error) => {
+            sound.mv(`${pathSound}/${nameFile}`, (error) => {
                 console.log(error)
             })
             req.body.sound = nameFile

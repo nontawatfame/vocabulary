@@ -4,6 +4,7 @@ FROM node:alpine
 WORKDIR /usr/app
 
 ENV NODE_ENV product
+ENV TZ="Asia/Bangkok"
 # Install PM2 globally
 RUN npm install --global pm2
 

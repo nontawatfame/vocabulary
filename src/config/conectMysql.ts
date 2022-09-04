@@ -21,9 +21,6 @@ export async function createPool() {
     pool = mysql23.createPool(db);
 }
 
-
-
-
 export async function query(sql: string, params: any): Promise<any> {
     console.log(process.env.HOST_MYSQL)
     return new Promise((resolve, reject) => {
