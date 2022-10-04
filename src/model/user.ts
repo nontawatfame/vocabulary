@@ -15,3 +15,10 @@ export async function findByUsername(username: string) {
 }
 
 
+export async function findAll() {
+    const sql: string = `SELECT * FROM user`
+    const result: RowDataPacket[] = await query(sql,null) as RowDataPacket[];
+    return result;
+}
+
+

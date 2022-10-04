@@ -3,8 +3,11 @@ import fileUpload, { UploadedFile } from "express-fileupload";
 import { validationResult } from "express-validator";
 import path from "path";
 import * as vocabulary from "../model/vocabulary";
+import * as setting from "../model/setting";
+import * as userService from "../model/user"
 import { Vocabulary, VocabularyTable } from "../types/vocabularyType";
 import fs from 'fs'
+import { SettingModal } from "../types/settingType";
 
 
 let pathSound =  ((process.env.RUN_START as string) == "production") ? 
@@ -112,7 +115,17 @@ export async function updateById(req: any, res: Response, next: NextFunction) {
 
 export async function random(req: Request<any>, res: Response, next: NextFunction) {
     try {
-        return res.status(200).json(await vocabulary.random())
+        let users = await userService.findAll()
+        let user: any;
+        if (users != null) {
+            user = users[0]
+        }
+        const resultSetting = (await setting.findByUserId(user.id)) as SettingModal[]
+        let condition = "1 = 1"
+        if (resultSetting != null) {
+            condition = `correct ${resultSetting[0].condition_setting} ${resultSetting[0].correct}`
+        }
+        return res.status(200).json(await vocabulary.random(condition))
     } catch (error) {
         return next(error)
     }
@@ -120,10 +133,21 @@ export async function random(req: Request<any>, res: Response, next: NextFunctio
 
 export async function findAllPagination(req: Request<{index: number, size: number},any,any,{search: string}>, res: Response, next: NextFunction) {
     try {
+        let users = await userService.findAll()
+        let user: any;
+        if (users != null) {
+            user = users[0]
+        }
+        const resultSetting = (await setting.findByUserId(user.id)) as SettingModal[]
+        let condition = "1 = 1"
+        if (resultSetting != null) {
+            condition = `correct ${resultSetting[0].condition_setting} ${resultSetting[0].correct}`
+        }
+
         let params = req.params
         let index = (params.index - 1) * params.size
         let search = req.query.search
-        return res.status(200).json(await vocabulary.findAllPagination(index, params.size, search))
+        return res.status(200).json(await vocabulary.findAllPagination(index, params.size, search, condition))
     } catch (error) {
         return next(error)
     }

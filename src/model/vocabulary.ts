@@ -28,7 +28,7 @@ const tableFrom: string = `(SELECT v.*, t.abbreviation, IFNULL(SUM(ld.correct),0
                                 LEFT JOIN log_detail ld on v.id = ld.vocabulary_id LEFT JOIN type t on v.type_id = t.id GROUP BY v.id)`
 const condition: string = "correct <= 10"
 
-export async function findAllPagination(index: number, size: number, search: string) {
+export async function findAllPagination(index: number, size: number, search: string, condition: string) {
     
     const sql: string = `SELECT * FROM ${tableFrom} T 
                         WHERE name LIKE '%${search}%' AND ${condition}
@@ -72,7 +72,7 @@ export async function updateById(id: number, vocabulary: Vocabulary) {
     return result.affectedRows;
 }
 
-export async function random() {
+export async function random(condition: string) {
     const sql: string = `SELECT * FROM ${tableFrom} T 
                 WHERE ${condition}
                 ORDER BY RAND() LIMIT 0,12;`
