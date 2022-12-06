@@ -5,7 +5,9 @@ import { validatorError, validatorMiddle } from "../helper/validator";
 
 const validatorSetting = [
     body("correct").exists().bail().notEmpty(), 
-    body("condition_setting").exists().bail().notEmpty(), 
+    body("condition_setting").exists().bail().notEmpty(),
+    body("maximum").exists().bail().notEmpty(),
+    body("minimum").exists().bail().notEmpty()
 
 ]
 

@@ -141,8 +141,17 @@ export async function findAllPagination(req: Request<{index: number, size: numbe
         const resultSetting = (await setting.findByUserId(user.id)) as SettingModal[]
         let condition = "1 = 1"
         if (resultSetting != null) {
-            condition = `correct ${resultSetting[0].condition_setting} ${resultSetting[0].correct}`
+            if (resultSetting[0].condition_setting == ">=") {
+                condition = `correct ${resultSetting[0].condition_setting} ${resultSetting[0].correct} And correct <= ${resultSetting[0].maximum}`
+            } else if (resultSetting[0].condition_setting == "<=") {
+                condition = `correct ${resultSetting[0].condition_setting} ${resultSetting[0].correct} And correct >= ${resultSetting[0].minimum}`
+            } else {
+                condition = `correct ${resultSetting[0].condition_setting} ${resultSetting[0].correct}`
+            }
+            
         }
+
+        console.log(condition)
 
         let params = req.params
         let index = (params.index - 1) * params.size
