@@ -120,6 +120,7 @@ export async function random(req: Request<any>, res: Response, next: NextFunctio
         if (users != null) {
             user = users[0]
         }
+        console.log(`users ${users}`)
         const resultSetting = (await setting.findByUserId(user.id)) as SettingModal[]
         let condition = "1 = 1"
         if (resultSetting != null) {

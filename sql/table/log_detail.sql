@@ -34,6 +34,6 @@ CREATE TABLE `log_detail`  (
   INDEX `vocabulary_id`(`vocabulary_id`) USING BTREE,
   CONSTRAINT `log_detail_ibfk_1` FOREIGN KEY (`log_id`) REFERENCES `log` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `log_detail_ibfk_2` FOREIGN KEY (`vocabulary_id`) REFERENCES `vocabulary` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 3416 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
